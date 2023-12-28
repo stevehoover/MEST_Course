@@ -1,5 +1,17 @@
 \m4_TLV_version 1d: tl-x.org
 \SV
+   // Macro providing required top-level module definition, random
+   // stimulus support, and Verilator config.
+   m4_makerchip_module   // (Expanded in Nav-TLV pane.)
+\TLV
+   // For RISC-V solutions, comment the line below.
+   //m4_define(['M4_CALCULATOR'], 1)
+   // Provide a slide number for the lab (reference below).
+   m4_define(['M4_SLIDE_NUM'], 100)
+
+   // Default Makerchip TL-Verilog Code Template
+   m4_include_makerchip_hidden(['myth_workshop_solutions.private.tlv'])
+\SV
    m4_include_lib(['https://raw.githubusercontent.com/stevehoover/warp-v_includes/2d6d36baa4d2bc62321f982f78c8fe1456641a43/risc-v_defs.tlv'])
 
 m4+definitions(['
@@ -370,3 +382,8 @@ m4_ifelse_block(M4_MAKERCHIP, 1,['
                where0: {left: 0, top: 0}
    '])    
    '])
+\TLV
+   m4+solution(M4_SLIDE_NUM)
+   m4+cpu_viz(@4)   // The visualization, configured to reflect the given pipeline stage.
+\SV
+   endmodule
