@@ -1,9 +1,13 @@
 \m4_TLV_version 1d: tl-x.org
 \SV
 
+\TLV cal_viz(@_stage, /_top)
+   // Only for Makerchip.
+   m4_ifdef(['M4_MAKERCHIP'], ['m4+cal_viz_internal(['@_stage'], ['/_top'])'], [''])
+
 // Visualization for calculator
 // #rand_mode is for transitioning from m4_rand(..) to \$random() to enable instantiation below top level.
-\TLV cal_viz(@_stage, /_top, #rand_mode)
+\TLV cal_viz_internal(@_stage, /_top)
    m4_pushdef(['m4_top'], m4_ifelse(/_top, [''], ['['/top']'], ['['/_top']']))
    m4_ifelse_block(m4_sp_graph_dangerous, 1, [''], ['
    |calc
