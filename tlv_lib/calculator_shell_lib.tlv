@@ -18,7 +18,7 @@
       @0
          /default
             $valid = ! m4_top|calc<>0$reset;
-            m4_ifelse(#rand_mode, [''], ['m4_rand($rand_op, 2, 0)'], ['$rand_op[3:0] = \$random()'])
+            m4_rand($rand_op, 2, 0)
             $op[2:0] = (*cyc_cnt % 2) ? ( *cyc_cnt > 33 ? ($rand_op[2:0] % 2) : *cyc_cnt > 15 ? $rand_op[2:0] : (($rand_op[2:0] % 2) + ($rand_op[2:0] % 4)) ) : >>1$op;
             $val1[31:0] = '0;
             $val2[31:0] = '0;
