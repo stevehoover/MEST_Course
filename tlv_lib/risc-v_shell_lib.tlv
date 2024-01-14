@@ -64,12 +64,12 @@
       // for pulling default viz signals into CPU
       // and then back into viz
       @0
-         $ANY = /top|cpuviz/defaults<>0$ANY;
+         $ANY = /fpga|cpuviz/defaults<>0$ANY;
          `BOGUS_USE($dummy)
          /xreg[31:0]
-            $ANY = /top|cpuviz/defaults/xreg<>0$ANY;
+            $ANY = /fpga|cpuviz/defaults/xreg<>0$ANY;
          /dmem[15:0]
-            $ANY = /top|cpuviz/defaults/dmem<>0$ANY;
+            $ANY = /fpga|cpuviz/defaults/dmem<>0$ANY;
    // String representations of the instructions for debug.
    \SV_plus
       logic [40*8-1:0] instr_strs [0:m5_NUM_INSTRS];
@@ -79,7 +79,7 @@
    |cpuviz
       @1
          /imem[m5_calc(m5_NUM_INSTRS-1):0]  // TODO: Cleanly report non-integer ranges.
-            $instr[31:0] = /top|cpu/imem<>0$instr;
+            $instr[31:0] = /fpga|cpu/imem<>0$instr;
             $instr_str[40*8-1:0] = *instr_strs[imem];
             \viz_js
                box: {width: 500, height: 18, strokeWidth: 0},
@@ -150,14 +150,14 @@
             
             $dummy[0:0]          = 1'b0;
       @_stage
-         $ANY = /top|cpu<>0$ANY;
+         $ANY = /fpga|cpu<>0$ANY;
          
          /xreg[31:0]
-            $ANY = /top|cpu/xreg<>0$ANY;
+            $ANY = /fpga|cpu/xreg<>0$ANY;
             `BOGUS_USE($dummy)
          
          /dmem[15:0]
-            $ANY = /top|cpu/dmem<>0$ANY;
+            $ANY = /fpga|cpu/dmem<>0$ANY;
             `BOGUS_USE($dummy)
 
          // m5_mnemonic_expr is build for WARP-V signal names, which are slightly different. Correct them.
