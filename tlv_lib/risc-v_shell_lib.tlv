@@ -10,7 +10,7 @@
 
 // Instruction memory in |cpu at the given stage.
 \TLV imem(@_stage)
-   // Instruction Memory containing program defined by m4_asm(...) instantiations.
+   // Instruction Memory containing program.
    @_stage
       \SV_plus
          // The program in an instruction memory.
@@ -58,7 +58,7 @@
    @_stage
 
 \TLV cpu_viz(@_stage)
-   m4_ifelse_block(M4_MAKERCHIP, 1,['
+   m4_ifelse_block(M4_MAKERCHIP, 1, ['
    m4_ifelse_block(m4_sp_graph_dangerous, 1, [''], ['
    |cpu
       // for pulling default viz signals into CPU
@@ -84,15 +84,16 @@
             \viz_js
                box: {width: 500, height: 18, strokeWidth: 0},
                onTraceData() {
-                  let instr_str = '$instr_str'.asString() + ": " + '$instr'.asBinaryStr(NaN);
+                  let instr_str = '$instr'.asBinaryStr(NaN) + "    " + '$instr_str'.asString();
                   return {objects: {instr_str: new fabric.Text(instr_str, {
                      top: 0,
                      left: 0,
                      fontSize: 14,
-                     fontFamily: "monospace"
+                     fontFamily: "monospace",
+                     fill: "white"
                   })}};
                },
-               where: {left: -580, top: 0}
+               where: {left: -450, top: 0}
              
       @0
          /defaults
@@ -164,19 +165,19 @@
          m4_define(['m4_modified_mnemonic_expr'], ['m4_patsubst(m5_mnemonic_expr, ['_instr'], [''])'])
          $mnemonic[10*8-1:0] = m4_modified_mnemonic_expr $is_load ? "LOAD      " : $is_store ? "STORE     " : "ILLEGAL   ";
          \viz_js
-            box: {left: -600, top: -20, width: 2000, height: 1000, strokeWidth: 0},
+            box: {left: -470, top: -20, width: 1070, height: 1000, strokeWidth: 0},
             render() {
                //
                // PC instr_mem pointer
                //
                let $pc = '$pc';
                let color = !('$valid'.asBool()) ? "gray" :
-                                                  "blue";
-               let pcPointer = new fabric.Text("->", {
-                  top: 18 * ($pc.asInt() / 4),
-                  left: -600,
+                                                  "cyan";
+               let pcPointer = new fabric.Text("➥", {
+                  top: 18 * ($pc.asInt() / 4) - 6,
+                  left: -166,
                   fill: color,
-                  fontSize: 14,
+                  fontSize: 24,
                   fontFamily: "monospace"
                });
                //
@@ -207,7 +208,7 @@
                          `      i[${'$imm'.asInt(NaN)}]`;
                let instrWithValues = new fabric.Text(str, {
                   top: 70,
-                  left: 90,
+                  left: 140,
                   fill: color,
                   fontSize: 14,
                   fontFamily: "monospace"
@@ -226,7 +227,8 @@
                      let regname = new fabric.Text("Reg File", {
                         top: -20, left: 2,
                         fontSize: 14,
-                        fontFamily: "monospace"
+                        fontFamily: "monospace",
+                        fill: "white"
                      });
                      return {regname};
                   }
@@ -235,7 +237,8 @@
                   let reg = new fabric.Text("", {
                      top: 0, left: 0,
                      fontSize: 14,
-                     fontFamily: "monospace"
+                     fontFamily: "monospace",
+                     fill: "white"
                   });
                   return {reg};
                },
@@ -246,7 +249,7 @@
                   let oldValStr = mod ? `(${'>>1$value'.asInt(NaN).toString()})` : "";
                   this.getObjects().reg.set({
                      text: regIdent + ": " + '$value'.asInt(NaN).toString() + oldValStr,
-                     fill: mod ? "blue" : "black"});
+                     fill: mod ? "cyan" : "white"});
                },
                where: {left: 365, top: -20},
                where0: {left: 0, top: 0}
@@ -263,7 +266,8 @@
                         top: -20,
                         left: 2,
                         fontSize: 14,
-                        fontFamily: "monospace"
+                        fontFamily: "monospace",
+                        fill: "white"
                      });
                      return {memname};
                   }
@@ -273,7 +277,8 @@
                      top: 0,
                      left: 10,
                      fontSize: 14,
-                     fontFamily: "monospace"
+                     fontFamily: "monospace",
+                     fill: "white"
                   });
                   return {mem};
                },
@@ -284,14 +289,9 @@
                   let oldValStr = mod ? `(${'>>1$value'.asInt(NaN).toString()})` : "";
                   this.getObjects().mem.set({
                      text: memIdent + ": " + '$value'.asInt(NaN).toString() + oldValStr,
-                     fill: mod ? "blue" : "black"});
+                     fill: mod ? "cyan" : "white"});
                },
                where: {left: 458, top: -20},
                where0: {left: 0, top: 0}
    '])    
    '])
-\TLV
-   m4+solution(100)
-   m4+cpu_viz(@4)   // The visualization, configured to reflect the given pipeline stage.
-\SV
-   endmodule
