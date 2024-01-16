@@ -1,105 +1,109 @@
-\m4_TLV_version 1d: tl-x.org
-\SV
+\m5_TLV_version 1d: tl-x.org
+\m5
 
    // ==========================================
-   // For use in Makerchip for the MYTH Workshop
    // Provides reference solutions
    // without visibility to source code.
    // ==========================================
    
    // ----------------------------------
    // Instructions:
-   //    - When stuck on a particular lab, configure code below,
-   //      and compile/simulate.
+   //    - When stuck on a particular lab, provide the LabId below, and compile/simulate.
    //    - A reference solution will build, but the source code will not be visible.
    //    - You may use waveforms, diagrams, and visualization to understand the proper circuit, but you
    //      will have to come up with the code. Logic expression syntax can be found by hovering over the
    //      signal assignment in the diagram.
-   //    - Also reference https://github.com/stevehoover/RISC-V_MYTH_Workshop/blob/master/README.md
-   //      for updated information during the workshop as well as live support links.
    // ----------------------------------
    
+   // Provide the Lab ID given at the lower right of the slide.
+   var(LabId, DONE)
 
-   // =============
-   // Configuration
-   // =============
+
+
+   // ================================================
+   // No need to touch anything below this line.
+
+   // Is this a calculator lab?
+   var(CalcLab, m5_if_regex(m5_LabId, ^C-, (), 1, 0))
+   // ---SETTINGS---
+   var(my_design, m5_if(m5_CalcLab, tt_um_calc, tt_um_riscv_cpu)) /// Change to tt_um_<your-github-username>_riscv_cpu. (See Tiny Tapeout repo README.md.)
+   var(debounce_inputs, 0)         /// Set to 1 to provide synchronization and debouncing on all input signals.
+                                   /// use "m5_neq(m5_MAKERCHIP, 1)" to debounce unless in Makerchip.
+   // --------------
    
-   // For RISC-V solutions, comment the line below.
-   m4_define(['M4_CALCULATOR'], 1)
-   // Provide a slide number for the lab (reference below).
-   m4_define(['M4_SLIDE_NUM'], 100)
+   // If debouncing, a user's module is within a wrapper, so it has a different name.
+   var(user_module_name, m5_if(m5_debounce_inputs, my_design, m5_my_design))
+   var(debounce_cnt, m5_if_eq(m5_MAKERCHIP, 1, 8'h03, 8'hff))
+\SV
+   // Include Tiny Tapeout Lab.
+   m4_include_lib(['https:/']['/raw.githubusercontent.com/os-fpga/Virtual-FPGA-Lab/84e7c389a63b4fbb5483238146168ed4188d1b8b/tlv_lib/tiny_tapeout_lib.tlv'])   
+
+   // Strict checking.
+   `default_nettype none
 
    // Default Makerchip TL-Verilog Code Template
    m4_include_makerchip_hidden(['myth_workshop_solutions.private.tlv'])
 
-   // Macro providing required top-level module definition, random
-   // stimulus support, and Verilator config.
-   m4_makerchip_module   // (Expanded in Nav-TLV pane.)
-\TLV
-   m4+solution(M4_SLIDE_NUM)
-   m4+cpu_viz(@4)   // The visualization, configured to reflect the given pipeline stage.
+
+// ================================================
+// A simple Makerchip Verilog test bench driving random stimulus.
+// Modify the module contents to your needs.
+// ================================================
+
+// Include the Makerchip module only in Makerchip. (Only because Yosys chokes on $urandom.)
+m4_ifelse_block(m5_MAKERCHIP, 1, ['
+
+module top(input logic clk, input logic reset, input logic [31:0] cyc_cnt, output logic passed, output logic failed);
+   // Tiny tapeout I/O signals.
+   logic [7:0] ui_in, uio_in, uo_out, uio_out, uio_oe;
+   assign ui_in = 8'b0;
+   assign uio_in = 8'b0;
+   logic ena = 1'b0;
+   logic rst_n = ! reset;
+      
+   // Instantiate the Tiny Tapeout module.
+   m5_user_module_name tt(.*);
+   
+   assign passed = uo_out[0];
+   assign failed = uo_out[1];
+endmodule
+
+'])   /// end Makerchip-only
+
+// Provide a wrapper module to debounce input signals if requested.
+m5_if(m5_debounce_inputs, ['m5_tt_top(m5_my_design)'])
+// The above macro expands to multiple lines. We enter a new \SV block to reset line tracking.
 \SV
-   endmodule
 
-/*
 
-Labs slide #, for reference
 
------ Calculator Labs ------
+// =======================
+// The Tiny Tapeout module
+// =======================
 
-Slide  Lab
------  ---
-23     Sequential Calculator
-35     Counter and Calculator in Pipeline
-36     2-Cycle Calculator
-41     2-Cycle Calculator with Validity
-43     Calculator with Single-Value Memory
+module m5_user_module_name (
+    input  wire [7:0] ui_in,    // Dedicated inputs - connected to the input switches
+    output wire [7:0] uo_out,   // Dedicated outputs - connected to the 7 segment display
+    input  wire [7:0] uio_in,   // IOs: Bidirectional Input path
+    output wire [7:0] uio_out,  // IOs: Bidirectional Output path
+    output wire [7:0] uio_oe,   // IOs: Bidirectional Enable path (active high: 0=input, 1=output)
+    input  wire       ena,      // will go high when the design is enabled
+    input  wire       clk,      // clock
+    input  wire       rst_n     // reset_n - low to reset
+);
+   logic passed, failed;  // Connected to uo_out[0] and uo_out[1] respectively, which connect to Makerchip passed/failed.
 
------ RISC-V Labs ----------
+   wire reset = ! rst_n;
+   
+\TLV
+   /* verilator lint_off UNOPTFLAT */
+   // Connect Tiny Tapeout I/Os to Virtual FPGA Lab.
+   m5+tt_connections()
+   
+   // Instantiate the Virtual FPGA Lab.
+   m5+board(/top, /fpga, 7, $, , hidden_solution)
+   // Label the switch inputs [0..7] (1..8 on the physical switch panel) (bottom-to-top).
+   m5+tt_input_labels_viz(['"UNUSED", "UNUSED", "UNUSED", "UNUSED", "UNUSED", "UNUSED", "UNUSED", "UNUSED"'])
 
-Slide    Lab 
------    ---                     
-
-D4SK2
------
-6      [Not supported] Next PC                                
-7      Fetch (part 1)
-8      Fetch (part 2)
-10     Instruction Types Decode and Immediate Decode
-11     Instruction Decode
-12     RISC-V Instruction Field Decode
-13     Instruction Decode
-
-D4SK3
------
-16     Register File Read
-17     Register File Read (part 2)
-18     ALU
-20     Register File Write
-21     Branches 1
-22     Branches 2
-25     Testbench
-
-D5SK1
------  
-33     3-Cycle valid
-36     3-Cycle RISC-V 1
-37     3-Cycle RISC-V 2
-
-D5SK2
------  
-39     Register File Bypass
-42     Branches
-44     Complete Instruction Decode
-45     Complete ALU
-
-D5SK3
------  
-48     Redirect Loads
-49     Load Data 1
-51     Load Data 2
-52     Load/Store in Program
-53     Jumps
-
- *********************************/
-
+\SV
+endmodule

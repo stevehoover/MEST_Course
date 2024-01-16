@@ -292,14 +292,14 @@
                this.getObjects().memnum.set({
                   text: '$mem_mod'.asInt(NaN).toString(16) + oldvalrecall,
                   fill: (recallmod || colormembutton) ? "blue" : "grey"});
-               this.getObjects().sumbox.set({fill: colorsum ?  "#9fc5e8ff" : "#eeeeeeff"});
-               this.getObjects().minbox.set({fill: colormin ?  "#9fc5e8ff" : "#eeeeeeff"});
-               this.getObjects().prodbox.set({fill: colorprod ? "#9fc5e8ff" : "#eeeeeeff"});
-               this.getObjects().quotbox.set({fill: colorquot ?  "#9fc5e8ff" : "#eeeeeeff"});
-               this.getObjects().membuttonbox.set({fill: colormembutton ? "#9fc5e8ff" : "#eeeeeeff"});
-               this.getObjects().recallbuttonbox.set({fill: colorrecallbutton ?  "#9fc5e8ff" : "#eeeeeeff"});
-               this.getObjects().memarrow.set({fill: colormemarrow ? "blue" : "#eeeeeeff"});
-               this.getObjects().recallarrow.set({fill: colorrecallarrow ?  "blue" : "#eeeeeeff"});
+               this.getObjects().sumbox.set({fill: colorsum ?  "#9fc5e8ff" : "white"});
+               this.getObjects().minbox.set({fill: colormin ?  "#9fc5e8ff" : "white"});
+               this.getObjects().prodbox.set({fill: colorprod ? "#9fc5e8ff" : "white"});
+               this.getObjects().quotbox.set({fill: colorquot ?  "#9fc5e8ff" : "white"});
+               this.getObjects().membuttonbox.set({fill: colormembutton ? "#9fc5e8ff" : "white"});
+               this.getObjects().recallbuttonbox.set({fill: colorrecallbutton ?  "#9fc5e8ff" : "white"});
+               this.getObjects().memarrow.set({fill: colormemarrow ? "blue" : "#779"});
+               this.getObjects().recallarrow.set({fill: colorrecallarrow ?  "blue" : "#779"});
              }
    '])
    m4_popdef(['m4_top'])
