@@ -22,7 +22,7 @@
             $rand_op[2:0] = $rand[2:0];
             $rand1[3:0] = $rand[6:3];
             $rand2[3:0] = $rand[10:7];
-            $op[2:0] = ((*cyc_cnt % 2) != 0) ? ( (*cyc_cnt > 33) ? ($rand_op[2:0] % 2) : (*cyc_cnt > 15) ? $rand_op[2:0] : ((($rand_op[2:0] % 2) != 0) + ($rand_op[2:0] % 4)) ) : >>1$op;
+            $op[2:0] = ((*top.cyc_cnt % 2) != 0) ? ( (*top.cyc_cnt > 33) ? ($rand_op[2:0] % 2) : (*top.cyc_cnt > 15) ? $rand_op[2:0] : ((($rand_op[2:0] % 2) != 0) + ($rand_op[2:0] % 4)) ) : >>1$op;
             $val1[31:0] = '0;
             $val2[31:0] = '0;
             $out[31:0] = '0;
