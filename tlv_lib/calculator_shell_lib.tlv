@@ -22,7 +22,12 @@
             $rand_op[2:0] = $rand[2:0];
             $rand1[3:0] = $rand[6:3];
             $rand2[3:0] = $rand[10:7];
-            $op[2:0] = ((*top.cyc_cnt % 2) != 0) ? ( (*top.cyc_cnt > 33) ? ($rand_op[2:0] % 2) : (*top.cyc_cnt > 15) ? $rand_op[2:0] : ((($rand_op[2:0] % 2) != 0) + ($rand_op[2:0] % 4)) ) : >>1$op;
+            $op[2:0] = ((*top.cyc_cnt % 2) != 0)
+                           ? $rand_op[2:0]
+                           //? ( (*top.cyc_cnt > 33) ? ($rand_op[2:0] % 2) :
+                           //    (*top.cyc_cnt > 15) ? $rand_op[2:0] :
+                           //                          ((($rand_op[2:0] % 2) != 0) + ($rand_op[2:0] % 4)) )
+                           : >>1$op;
             $val1[31:0] = '0;
             $val2[31:0] = '0;
             $out[31:0] = '0;
@@ -75,11 +80,12 @@
                  height: 366,
                  stroke: "black",
                  strokeWidth: 1,
+                 rx: 5, ry: 5,
                });
                let val1box = new fabric.Rect({
                  left: 150 + 28,
                  top: 150 + 83,
-                 fill: "#eeeeeeff",
+                 fill: "#ddd",
                  width: 254 + 14,
                  height: 40,
                  stroke: "black",
@@ -94,7 +100,7 @@
                let val2box = new fabric.Rect({
                  left: 150 + 187,
                  top: 150 + 221,
-                 fill: "#eeeeeeff",
+                 fill: "#ddd",
                  width: 109,
                  height: 40,
                  stroke: "black",
@@ -109,7 +115,7 @@
                let outbox = new fabric.Rect({
                  left: 150 + 97,
                  top: 150 + 300,
-                 fill: "#eeeeeeff",
+                 fill: "#ddd",
                  width: 199,
                  height: 40,
                  stroke: "black",
@@ -126,7 +132,7 @@
                  top: 150 + 300 + 6,
                  fontSize: 22,
                  fontFamily: "Times",
-                 fill : "#eeeeeeff",
+                 fill : "#ddd",
                });
                let equalname = new fabric.Text("=", {
                  left: 150 + 38,
@@ -140,8 +146,9 @@
                  fill: "white",
                  width: 64,
                  height: 64,
-                 stroke: "black",
-                 strokeWidth: 1
+                 stroke: "darkgray",
+                 strokeWidth: 1,
+                 rx: 3, ry: 3,
                });
                let prodbox = new fabric.Rect({
                  left: 150 + 28,
@@ -149,8 +156,9 @@
                  fill: "white",
                  width: 64,
                  height: 64,
-                 stroke: "black",
-                 strokeWidth: 1
+                 stroke: "darkgray",
+                 strokeWidth: 1,
+                 rx: 3, ry: 3,
                });
                let minbox = new fabric.Rect({
                  left: 150 + 105,
@@ -158,8 +166,9 @@
                  fill: "white",
                  width: 64,
                  height: 64,
-                 stroke: "black",
-                 strokeWidth: 1
+                 stroke: "darkgray",
+                 strokeWidth: 1,
+                 rx: 3, ry: 3,
                });
                let quotbox = new fabric.Rect({
                  left: 150 + 105,
@@ -167,8 +176,9 @@
                  fill: "white",
                  width: 64,
                  height: 64,
-                 stroke: "black",
-                 strokeWidth: 1
+                 stroke: "darkgray",
+                 strokeWidth: 1,
+                 rx: 3, ry: 3,
                });
                let sumicon = new fabric.Text("+", {
                  left: 150 + 28 + 26,
@@ -194,14 +204,14 @@
                  fontSize: 22,
                  fontFamily: "Times",
                });
-                 let membox = new fabric.Rect({
+               let membox = new fabric.Rect({
                  left: 105 + 150,
                  top: 150 + 25,
-                 fill: "#eeeeeeff",
+                 fill: "#ddd",
                  width: 191,
                  height: 23,
                  stroke: "black",
-                 strokeWidth: 1,
+                 strokeWidth: 1
                });
                let memname = new fabric.Text("mem", {
                  left: 150 + 28,
@@ -212,14 +222,14 @@
                let memarrow = new fabric.Text("->", {
                  left: 150 + 32 + 47,
                  top: 150 + 25,
-                 fill: "#eeeeeeff",
+                 fill: "#779",
                  fontSize: 22,
                  fontFamily: "monospace",
                });
                let recallarrow = new fabric.Text("->", {
                  left: 150 + 38 + 28,
                  top: 150 + 308,
-                 fill: "#eeeeeeff",
+                 fill: "#779",
                  fontSize: 22,
                  fontFamily: "monospace",
                });
@@ -235,7 +245,7 @@
                  fill: "white",
                  width: 45,
                  height: 40,
-                 stroke: "black",
+                 stroke: "darkgray",
                  strokeWidth: 1
                });
                let recallbuttonbox = new fabric.Rect({
@@ -244,8 +254,9 @@
                  fill: "white",
                  width: 51,
                  height: 40,
-                 stroke: "black",
-                 strokeWidth: 1
+                 stroke: "darkgray",
+                 strokeWidth: 1,
+                 rx: 3, ry: 3,
                });
                let membuttonname = new fabric.Text("mem", {
                  left: 150 + 187 + 1,
