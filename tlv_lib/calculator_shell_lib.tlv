@@ -6,7 +6,6 @@
    m4_ifdef(['M4_MAKERCHIP'], ['m4+cal_viz_internal(['@_stage'], ['/_top'])'], [''])
 
 // Visualization for calculator
-// #rand_mode is for transitioning from m4_rand(..) to \$random() to enable instantiation below top level.
 \TLV cal_viz_internal(@_stage, /_top)
    m4_pushdef(['m4_top'], m4_ifelse(/_top, [''], ['['/top']'], ['['/_top']']))
    m4_ifelse_block(m4_sp_graph_dangerous, 1, [''], ['
@@ -18,14 +17,16 @@
       @0
          /default
             $valid = ! m4_top|calc<>0$reset;
-            m4_rand($rand_op, 2, 0)
+            \SV_plus
+               always @(posedge clk) $$rand[31:0] <= \$random();
+            $rand_op[2:0] = $rand[2:0];
+            $rand1[3:0] = $rand[6:3];
+            $rand2[3:0] = $rand[10:7];
             $op[2:0] = ((*cyc_cnt % 2) != 0) ? ( (*cyc_cnt > 33) ? ($rand_op[2:0] % 2) : (*cyc_cnt > 15) ? $rand_op[2:0] : ((($rand_op[2:0] % 2) != 0) + ($rand_op[2:0] % 4)) ) : >>1$op;
             $val1[31:0] = '0;
             $val2[31:0] = '0;
             $out[31:0] = '0;
             $mem[31:0] = 32'habcd1234;
-            m4_rand($rand1, 3, 0)
-            m4_rand($rand2, 3, 0)
             $dummy = 0;
             `BOGUS_USE($out $mem $valid $val1 $val2 $dummy $rand1 $rand2)
       @_stage   
