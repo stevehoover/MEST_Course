@@ -58,17 +58,19 @@
                  top: 150 - 40,
                  fontSize: 22,
                  fontFamily: "Times",
+                 fill: "white",
                });
                let hexcalname = new fabric.Text("HEX CALCULATOR", {
                  left: 150 + 60,
                  top: 150 - 20,
                  fontSize: 22,
                  fontFamily: "Times",
+                 fill: "white",
                });
                let calbox = new fabric.Rect({
                  left: 150,
                  top: 150,
-                 fill: "#eeeeeeff",
+                 fill: "#779",
                  width: 316,
                  height: 366,
                  stroke: "black",
@@ -135,7 +137,7 @@
                  let sumbox = new fabric.Rect({
                  left: 150 + 28,
                  top: 150 + 148,
-                 fill: "#eeeeeeff",
+                 fill: "white",
                  width: 64,
                  height: 64,
                  stroke: "black",
@@ -144,7 +146,7 @@
                let prodbox = new fabric.Rect({
                  left: 150 + 28,
                  top: 150 + 222,
-                 fill: "#eeeeeeff",
+                 fill: "white",
                  width: 64,
                  height: 64,
                  stroke: "black",
@@ -153,7 +155,7 @@
                let minbox = new fabric.Rect({
                  left: 150 + 105,
                  top: 150 + 148,
-                 fill: "#eeeeeeff",
+                 fill: "white",
                  width: 64,
                  height: 64,
                  stroke: "black",
@@ -162,7 +164,7 @@
                let quotbox = new fabric.Rect({
                  left: 150 + 105,
                  top: 150 + 222,
-                 fill: "#eeeeeeff",
+                 fill: "white",
                  width: 64,
                  height: 64,
                  stroke: "black",
@@ -230,7 +232,7 @@
                let membuttonbox = new fabric.Rect({
                  left: 150 + 187,
                  top: 150 + 151,
-                 fill: "#eeeeeeff",
+                 fill: "white",
                  width: 45,
                  height: 40,
                  stroke: "black",
@@ -239,7 +241,7 @@
                let recallbuttonbox = new fabric.Rect({
                  left: 150 + 245,
                  top: 150 + 151,
-                 fill: "#eeeeeeff",
+                 fill: "white",
                  width: 51,
                  height: 40,
                  stroke: "black",
