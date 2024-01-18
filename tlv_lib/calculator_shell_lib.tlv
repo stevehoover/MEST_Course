@@ -146,7 +146,7 @@
                  fill: "white",
                  width: 64,
                  height: 64,
-                 stroke: "darkgray",
+                 stroke: "#333",
                  strokeWidth: 1,
                  rx: 3, ry: 3,
                });
@@ -156,7 +156,7 @@
                  fill: "white",
                  width: 64,
                  height: 64,
-                 stroke: "darkgray",
+                 stroke: "#333",
                  strokeWidth: 1,
                  rx: 3, ry: 3,
                });
@@ -166,7 +166,7 @@
                  fill: "white",
                  width: 64,
                  height: 64,
-                 stroke: "darkgray",
+                 stroke: "#333",
                  strokeWidth: 1,
                  rx: 3, ry: 3,
                });
@@ -176,7 +176,7 @@
                  fill: "white",
                  width: 64,
                  height: 64,
-                 stroke: "darkgray",
+                 stroke: "#333",
                  strokeWidth: 1,
                  rx: 3, ry: 3,
                });
@@ -245,8 +245,9 @@
                  fill: "white",
                  width: 45,
                  height: 40,
-                 stroke: "darkgray",
-                 strokeWidth: 1
+                 stroke: "#333",
+                 strokeWidth: 1,
+                 rx: 3, ry: 3,
                });
                let recallbuttonbox = new fabric.Rect({
                  left: 150 + 245,
@@ -254,7 +255,7 @@
                  fill: "white",
                  width: 51,
                  height: 40,
-                 stroke: "darkgray",
+                 stroke: "#333",
                  strokeWidth: 1,
                  rx: 3, ry: 3,
                });

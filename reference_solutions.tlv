@@ -1,5 +1,6 @@
 \m5_TLV_version 1d: tl-x.org
 \m5
+   use(m5-1.0)
 
    // ==========================================
    // Provides reference solutions
@@ -24,7 +25,7 @@
    // No need to touch anything below this line.
 
    // Is this a calculator lab?
-   var(CalcLab, m5_if_regex(m5_LabId, ^C-, (), 1, 0))
+   var(CalcLab, m5_if_regex(m5_LabId, ^\(C\)-, (C), 1, 0))
    // ---SETTINGS---
    var(my_design, m5_if(m5_CalcLab, tt_um_calc, tt_um_riscv_cpu)) /// Change to tt_um_<your-github-username>_riscv_cpu. (See Tiny Tapeout repo README.md.)
    var(debounce_inputs, 0)         /// Set to 1 to provide synchronization and debouncing on all input signals.
@@ -36,13 +37,13 @@
    var(debounce_cnt, m5_if_eq(m5_MAKERCHIP, 1, 8'h03, 8'hff))
 \SV
    // Include Tiny Tapeout Lab.
-   m4_include_lib(['https:/']['/raw.githubusercontent.com/os-fpga/Virtual-FPGA-Lab/84e7c389a63b4fbb5483238146168ed4188d1b8b/tlv_lib/tiny_tapeout_lib.tlv'])   
+   m4_include_lib(['https:/']['/raw.githubusercontent.com/os-fpga/Virtual-FPGA-Lab/79e40995aab07f65c1616c30c046f26893de3df5/tlv_lib/tiny_tapeout_lib.tlv'])   
 
    // Strict checking.
    `default_nettype none
 
    // Default Makerchip TL-Verilog Code Template
-   m4_include_makerchip_hidden(['myth_workshop_solutions.private.tlv'])
+   m4_include_makerchip_hidden(['mest_course_solutions.private.tlv'])
 
 
 // ================================================
