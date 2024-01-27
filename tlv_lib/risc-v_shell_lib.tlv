@@ -4,6 +4,12 @@
    
    define_vector(WORD, 32)
    var(NUM_INSTRS, 0)
+
+   // Allow register file and dmem sizes to be configurable (small powers of two).
+   default_var(num_regs, 16)
+   define_hier(XREG, m5_num_regs)
+   default_var(dmem_size, 8)
+   define_hier(DMEM, m5_dmem_size)
 \SV
    m4_include_lib(['https://raw.githubusercontent.com/stevehoover/warp-v_includes/450357b4993fa480e7fca57dc346e39cba21b6bc/risc-v_defs.tlv'])
 
@@ -27,16 +33,16 @@
 \TLV rf(@_rd, @_wr)
    // Reg File
    @_wr
-      /xreg[31:0]
+      /m5_XREG_RANGE
          $wr = |cpu$rf_wr_en && (|cpu$rf_wr_index != 5'b0) && (|cpu$rf_wr_index == #xreg);
          $value[31:0] = |cpu$reset ?   #xreg           :
                         $wr        ?   |cpu$rf_wr_data :
                                        $RETAIN;
    @_rd
       ?$rf_rd_en1
-         $rf_rd_data1[31:0] = /xreg[$rf_rd_index1]>>m4_stage_eval(@_wr - @_rd + 1)$value;
+         $rf_rd_data1[31:0] = /xreg[$rf_rd_index1[m5_XREG_INDEX_MAX:0]]>>m4_stage_eval(@_wr - @_rd + 1)$value;
       ?$rf_rd_en2
-         $rf_rd_data2[31:0] = /xreg[$rf_rd_index2]>>m4_stage_eval(@_wr - @_rd + 1)$value;
+         $rf_rd_data2[31:0] = /xreg[$rf_rd_index2[m5_XREG_INDEX_MAX:0]]>>m4_stage_eval(@_wr - @_rd + 1)$value;
       `BOGUS_USE($rf_rd_data1 $rf_rd_data2) 
 
 
@@ -44,14 +50,14 @@
 \TLV dmem(@_stage)
    // Data Memory
    @_stage
-      /dmem[15:0]
-         $wr = |cpu$dmem_wr_en && (|cpu$dmem_addr == #dmem);
+      /m5_dmem_hier
+         $wr = |cpu$dmem_wr_en && (|cpu$dmem_addr[m5_DMEM_INDEX_MAX:0] == #dmem);
          $value[31:0] = |cpu$reset ?   #dmem :
                         $wr        ?   |cpu$dmem_wr_data :
                                        $RETAIN;
                                   
       ?$dmem_rd_en
-         $dmem_rd_data[31:0] = /dmem[$dmem_addr]>>1$value;
+         $dmem_rd_data[31:0] = /dmem[$dmem_addr[m5_DMEM_INDEX_MAX:0]]>>1$value;
       `BOGUS_USE($dmem_rd_data)
 
 \TLV myth_fpga(@_stage)
@@ -66,9 +72,9 @@
       @0
          $ANY = /fpga|cpuviz/defaults<>0$ANY;
          `BOGUS_USE($dummy)
-         /xreg[31:0]
+         /m5_XREG_RANGE
             $ANY = /fpga|cpuviz/defaults/xreg<>0$ANY;
-         /dmem[15:0]
+         /m5_DMEM_RANGE
             $ANY = /fpga|cpuviz/defaults/dmem<>0$ANY;
    // String representations of the instructions for debug.
    \SV_plus
@@ -130,12 +136,12 @@
             $imem_rd_en          = 1'b0;
             $imem_rd_addr[m5_IMEM_INDEX_CNT-1:0] = {m5_IMEM_INDEX_CNT{1'b0}};
             
-            /xreg[31:0]
+            /m5_XREG_RANGE
                $value[31:0]      = 32'b0;
                $wr               = 1'b0;
                `BOGUS_USE($value $wr)
                $dummy[0:0]       = 1'b0;
-            /dmem[15:0]
+            /m5_DMEM_RANGE
                $value[31:0]      = 32'b0;
                $wr               = 1'b0;
                `BOGUS_USE($value $wr) 
@@ -153,11 +159,11 @@
       @_stage
          $ANY = /fpga|cpu<>0$ANY;
          
-         /xreg[31:0]
+         /m5_XREG_RANGE
             $ANY = /fpga|cpu/xreg<>0$ANY;
             `BOGUS_USE($dummy)
          
-         /dmem[15:0]
+         /m5_DMEM_RANGE
             $ANY = /fpga|cpu/dmem<>0$ANY;
             `BOGUS_USE($dummy)
 
@@ -218,7 +224,7 @@
          //
          // Register file
          //
-         /xreg[31:0]           
+         /m5_XREG_RANGE
             \viz_js
                box: {width: 90, height: 18, strokeWidth: 0},
                all: {
@@ -256,7 +262,7 @@
          //
          // DMem
          //
-         /dmem[15:0]
+         /m5_DMEM_RANGE
             \viz_js
                box: {width: 100, height: 18, strokeWidth: 0},
                all: {
