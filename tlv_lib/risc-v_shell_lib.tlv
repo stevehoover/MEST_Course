@@ -33,16 +33,16 @@
 \TLV rf(@_rd, @_wr)
    // Reg File
    @_wr
-      /m5_XREG_RANGE
+      /m5_XREG_HIER
          $wr = |cpu$rf_wr_en && (|cpu$rf_wr_index != 5'b0) && (|cpu$rf_wr_index == #xreg);
          $value[31:0] = |cpu$reset ?   #xreg           :
                         $wr        ?   |cpu$rf_wr_data :
                                        $RETAIN;
    @_rd
       ?$rf_rd_en1
-         $rf_rd_data1[31:0] = /xreg[$rf_rd_index1[m5_XREG_INDEX_MAX:0]]>>m4_stage_eval(@_wr - @_rd + 1)$value;
+         $rf_rd_data1[31:0] = /xreg[$rf_rd_index1[m5_XREG_INDEX_RANGE]]>>m4_stage_eval(@_wr - @_rd + 1)$value;
       ?$rf_rd_en2
-         $rf_rd_data2[31:0] = /xreg[$rf_rd_index2[m5_XREG_INDEX_MAX:0]]>>m4_stage_eval(@_wr - @_rd + 1)$value;
+         $rf_rd_data2[31:0] = /xreg[$rf_rd_index2[m5_XREG_INDEX_RANGE]]>>m4_stage_eval(@_wr - @_rd + 1)$value;
       `BOGUS_USE($rf_rd_data1 $rf_rd_data2) 
 
 
@@ -50,14 +50,14 @@
 \TLV dmem(@_stage)
    // Data Memory
    @_stage
-      /m5_DMEM_RANGE
-         $wr = |cpu$dmem_wr_en && (|cpu$dmem_addr[m5_DMEM_INDEX_MAX:0] == #dmem);
+      /m5_DMEM_HIER
+         $wr = |cpu$dmem_wr_en && (|cpu$dmem_addr[m5_DMEM_INDEX_RANGE] == #dmem);
          $value[31:0] = |cpu$reset ?   #dmem :
                         $wr        ?   |cpu$dmem_wr_data :
                                        $RETAIN;
                                   
       ?$dmem_rd_en
-         $dmem_rd_data[31:0] = /dmem[$dmem_addr[m5_DMEM_INDEX_MAX:0]]>>1$value;
+         $dmem_rd_data[31:0] = /dmem[$dmem_addr[m5_DMEM_INDEX_RANGE]]>>1$value;
       `BOGUS_USE($dmem_rd_data)
 
 \TLV myth_fpga(@_stage)
@@ -72,9 +72,9 @@
       @0
          $ANY = /fpga|cpuviz/defaults<>0$ANY;
          `BOGUS_USE($dummy)
-         /m5_XREG_RANGE
+         /m5_XREG_HIER
             $ANY = /fpga|cpuviz/defaults/xreg<>0$ANY;
-         /m5_DMEM_RANGE
+         /m5_DMEM_HIER
             $ANY = /fpga|cpuviz/defaults/dmem<>0$ANY;
    // String representations of the instructions for debug.
    \SV_plus
@@ -136,12 +136,12 @@
             $imem_rd_en          = 1'b0;
             $imem_rd_addr[m5_IMEM_INDEX_CNT-1:0] = {m5_IMEM_INDEX_CNT{1'b0}};
             
-            /m5_XREG_RANGE
+            /m5_XREG_HIER
                $value[31:0]      = 32'b0;
                $wr               = 1'b0;
                `BOGUS_USE($value $wr)
                $dummy[0:0]       = 1'b0;
-            /m5_DMEM_RANGE
+            /m5_DMEM_HIER
                $value[31:0]      = 32'b0;
                $wr               = 1'b0;
                `BOGUS_USE($value $wr) 
@@ -159,11 +159,11 @@
       @_stage
          $ANY = /fpga|cpu<>0$ANY;
          
-         /m5_XREG_RANGE
+         /m5_XREG_HIER
             $ANY = /fpga|cpu/xreg<>0$ANY;
             `BOGUS_USE($dummy)
          
-         /m5_DMEM_RANGE
+         /m5_DMEM_HIER
             $ANY = /fpga|cpu/dmem<>0$ANY;
             `BOGUS_USE($dummy)
 
@@ -224,7 +224,7 @@
          //
          // Register file
          //
-         /m5_XREG_RANGE
+         /m5_XREG_HIER
             \viz_js
                box: {width: 90, height: 18, strokeWidth: 0},
                all: {
@@ -262,7 +262,7 @@
          //
          // DMem
          //
-         /m5_DMEM_RANGE
+         /m5_DMEM_HIER
             \viz_js
                box: {width: 100, height: 18, strokeWidth: 0},
                all: {
