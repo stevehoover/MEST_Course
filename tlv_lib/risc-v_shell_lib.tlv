@@ -50,7 +50,7 @@
 \TLV dmem(@_stage)
    // Data Memory
    @_stage
-      /m5_dmem_hier
+      /m5_DMEM_RANGE
          $wr = |cpu$dmem_wr_en && (|cpu$dmem_addr[m5_DMEM_INDEX_MAX:0] == #dmem);
          $value[31:0] = |cpu$reset ?   #dmem :
                         $wr        ?   |cpu$dmem_wr_data :
