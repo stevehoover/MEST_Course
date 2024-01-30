@@ -28,31 +28,31 @@
                            //    (*top.cyc_cnt > 15) ? $rand_op[2:0] :
                            //                          ((($rand_op[2:0] % 2) != 0) + ($rand_op[2:0] % 4)) )
                            : >>1$op;
-            $val1[31:0] = '0;
-            $val2[31:0] = '0;
-            $out[31:0] = '0;
-            $mem[31:0] = 32'habcd1234;
+            $val1[7:0] = '0;
+            $val2[7:0] = '0;
+            $out[7:0] = '0;
+            $mem[7:0] = 8'hab;   // Indicates to VIZ that there is no memory.
             $dummy = 0;
             `BOGUS_USE($out $mem $valid $val1 $val2 $dummy $rand1 $rand2)
       @_stage   
          $ANY = m4_top|calc<>0$ANY;
 
-         $op_viz[2:0] = {{($mem == 32'habcd1234) ? 1'b0 : (($op >> 2) > 0)}, $op[1:0]};
-         $mem_mod[31:0] = ($mem[31:0] == 32'habcd1234) ? 32'b0 : $mem[31:0];
+         $op_viz[2:0] = {{($mem == 8'hab) ? 1'b0 : (($op >> 2) > 0)}, $op[1:0]};
+         $mem_mod[7:0] = ($mem[7:0] == 8'hab) ? 8'b0 : $mem[7:0];
          $is_op_sum     = ($valid && ($op_viz[2:0] == 3'b000)); // sum
          $is_op_diff    = ($valid && ($op_viz[2:0] == 3'b001)); // diff
          $is_op_prod    = ($valid && ($op_viz[2:0] == 3'b010)); // prod
          $is_op_quot    = ($valid && ($op_viz[2:0] == 3'b011)); // quot
          $is_op_recall  = ($valid && ($op_viz[2:0] == 3'b100)); // recall(retrieving from memory)
-         $is_op_mem     = ($valid && ($op_viz[2:0] == 3'b101) && !($mem == 32'habcd1234)); // mem(storing to memory)
+         $is_op_mem     = ($valid && ($op_viz[2:0] == 3'b101) && !($mem == 8'hab)); // mem(storing to memory)
          $is_invalid_op = ($valid && ($op_viz[2:0] == 3'b110 || $op_viz[2:0] == 3'b111)); // invalid operation?
 
          //These signal represents the change in value's and is used to generate colours in \viz according.
          $val1_changed = $valid && !$is_op_recall && !$is_invalid_op;
          $val2_changed = $valid && !$is_op_recall && !$is_op_mem && !$is_invalid_op;
          $out_changed  = $valid && ($out_modified || !(|$out_modified)) && !$is_invalid_op && !$is_op_mem;
-         //$out_modified[31:0] = ($out > ((1 << 31) - 1)) ? (~$out + 1) : $out;
-         $out_modified[31:0] = $out;
+         //$out_modified[7:0] = ($out > ((1 << 31) - 1)) ? (~$out + 1) : $out;
+         $out_modified[7:0] = $out;
          //$is_neg_num = ($out > ((1 << 31) - 1));
 
          \viz_js

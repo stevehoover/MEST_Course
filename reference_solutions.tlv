@@ -47,7 +47,7 @@
    var(debounce_cnt, m5_if_eq(m5_MAKERCHIP, 1, 8'h03, 8'hff))
 \SV
    // Include Tiny Tapeout Lab.
-   m4_include_lib(['https:/']['/raw.githubusercontent.com/os-fpga/Virtual-FPGA-Lab/38b4c662766ee8e7b82b197d45e5895c50ce3ab7/tlv_lib/tiny_tapeout_lib.tlv'])
+   m4_include_lib(['https:/']['/raw.githubusercontent.com/os-fpga/Virtual-FPGA-Lab/f4142c041d7a4c4235fcfb2f438038c557f254c5/tlv_lib/tiny_tapeout_lib.tlv'])
 
    // Default Makerchip TL-Verilog Code Template
    m4_include_makerchip_hidden(['mest_course_solutions.private.tlv'])
@@ -87,7 +87,7 @@ module top(input logic clk, input logic reset, input logic [31:0] cyc_cnt, outpu
    // Instantiate the Tiny Tapeout module.
    m5_user_module_name tt(.*);
    
-   assign passed = m5_if(m5_CalcLab, ['top.cyc_cnt > m5_if(m5_reached(C-TB), 60, 40)'], ['uo_out[0]']);
+   assign passed = m5_if(m5_CalcLab, ['top.cyc_cnt > 60'], ['uo_out[0]']);
    assign failed = m5_if(m5_CalcLab, ['1'b0'],             ['uo_out[1]']);
 endmodule
 
