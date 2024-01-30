@@ -289,7 +289,7 @@
                
                this.getObjects().memnum.set({
                   text: mem_mod.toString(16) + oldvalrecall,
-                  fill: '$has_mem' ? "blue" : "grey"});
+                  fill: has_mem ? "blue" : "grey"});
                this.getObjects().sumbox.set({fill: colorsum ?  "#9fc5e8ff" : "white"});
                this.getObjects().minbox.set({fill: colormin ?  "#9fc5e8ff" : "white"});
                this.getObjects().prodbox.set({fill: colorprod ? "#9fc5e8ff" : "white"});
