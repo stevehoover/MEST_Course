@@ -31,29 +31,11 @@
             $val1[7:0] = '0;
             $val2[7:0] = '0;
             $out[7:0] = '0;
-            $mem[7:0] = 8'hab;   // Indicates to VIZ that there is no memory.
+            $mem[8:0] = 9'h100;   // Indicates to VIZ that there is no memory.
             $dummy = 0;
             `BOGUS_USE($out $mem $valid $val1 $val2 $dummy $rand1 $rand2)
       @_stage   
          $ANY = m4_top|calc<>0$ANY;
-
-         $has_mem = $mem != 8'hab;
-         /* verilator lint_save */
-         /* verilator lint_off WIDTH */
-         $op_viz[2:0] = $has_mem ? $op : $op[1:0];
-         /* verilator lint_restore */
-         $mem_mod[7:0] = $has_mem ? $mem[7:0]: 8'b0 ;
-         $is_op_sum     = ($valid && ($op_viz[2:0] == 3'b000)); // sum
-         $is_op_diff    = ($valid && ($op_viz[2:0] == 3'b001)); // diff
-         $is_op_prod    = ($valid && ($op_viz[2:0] == 3'b010)); // prod
-         $is_op_quot    = ($valid && ($op_viz[2:0] == 3'b011)); // quot
-         $is_op_recall  = ($valid && ($op_viz[2:0] == 3'b100)); // recall(retrieving from memory)
-         $is_op_mem     = ($valid && ($op_viz[2:0] == 3'b101) && $has_mem); // mem(storing to memory)
-         $is_invalid_op = ($valid && ($op_viz[2:0] == 3'b110 || $op_viz[2:0] == 3'b111)); // invalid operation?
-
-         //These signal represents the change in value's and is used to generate colours in \viz according.
-         $val2_changed = $valid && !$is_op_recall && !$is_op_mem && !$is_invalid_op;
-         //$is_neg_num = ($out > ((1 << 31) - 1));
 
          \viz_js
             box: {strokeWidth: 0},
@@ -275,21 +257,26 @@
             },
             render() {
                let valid = '$valid'.asBool(false);
-               let colorsum =  '$is_op_sum'.asBool(false);
-               let colorprod = '$is_op_prod'.asBool(false);
-               let colormin = '$is_op_diff'.asBool(false);
-               let colorquot = '$is_op_quot'.asBool(false);
-               let colormembutton = '$is_op_mem'.asBool(false);
-               let colorrecallbutton = '$is_op_recall'.asBool(false);
-               let colormemarrow = '$is_op_mem'.asBool(false);
-               let colorrecallarrow = '$is_op_recall'.asBool(false);
-               let recallmod = '$is_op_recall'.asBool(false);
-               let val2mod = '$val2_changed'.asBool(false);
-               //let colornegnum = '$is_neg_num'.asBool(false);
-               let oldvalval1 = ""; // for debugging
-               let oldvalval2 = ""; // for debugging
-               let oldvalout = ""; // for debugging
-               let oldvalrecall = ""; // for debugging
+               let has_mem = '$mem'.asInt(NaN) != 0x100;
+               let op = has_mem ? '$op'.asInt(NaN) : '$op'.asInt(NaN) & 0x3;
+               let mem_mod = has_mem ? '$mem'.asInt(NaN) : 0;
+               let colorsum     = valid && (op == 0); // sum
+               let colormin    = valid && (op == 1); // diff
+               let colorprod    = valid && (op == 2); // prod
+               let colorquot    = valid && (op == 3); // quot
+               let colorrecallarrow  = valid && (op == 4); // recall(retrieving from memory)
+               let colormemarrow     = valid && (op == 5); // mem(storing to memory)
+               let is_invalid_op = valid && (op == 6 || op == 7); // invalid operation?
+               let val2mod  = valid && !is_op_recall && !is_op_mem && !is_invalid_op;
+               let colormembutton = colormemarrow
+               let colorrecallbutton = colorrecallarrow;
+               
+               // For debugging
+               let oldvalval1 = "";
+               let oldvalval2 = "";
+               let oldvalout = "";
+               let oldvalrecall = "";
+
                this.getObjects().val1num.set({
                   text: '$val1'.asInt(NaN).toString(16) + oldvalval1,
                   fill: "blue"});
