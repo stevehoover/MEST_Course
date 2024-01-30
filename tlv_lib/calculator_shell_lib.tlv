@@ -283,7 +283,7 @@
                   fill: is_arith ? "blue" : "grey"});
                this.getObjects().outnum.set({
                   text: '$out'.asInt(NaN).toString(16) + oldvalout,
-                  fill: valid ? "blue" : "grey"});
+                  fill: is_arith ? "blue" : "grey"});
                
                this.getObjects().memnum.set({
                   text: mem_mod.toString(16) + oldvalrecall,
