@@ -260,16 +260,14 @@
                let has_mem = '$mem'.asInt(NaN) != 0x100;
                let op = has_mem ? '$op'.asInt(NaN) : '$op'.asInt(NaN) & 0x3;
                let mem_mod = has_mem ? '$mem'.asInt(NaN) : 0;
-               let colorsum     = valid && (op == 0); // sum
-               let colormin    = valid && (op == 1); // diff
-               let colorprod    = valid && (op == 2); // prod
-               let colorquot    = valid && (op == 3); // quot
-               let colorrecallarrow  = valid && (op == 4); // recall(retrieving from memory)
-               let colormemarrow     = valid && (op == 5); // mem(storing to memory)
-               let is_invalid_op = valid && (op == 6 || op == 7); // invalid operation?
-               let val2mod  = valid && !is_op_recall && !is_op_mem && !is_invalid_op;
-               let colormembutton = colormemarrow
-               let colorrecallbutton = colorrecallarrow;
+               let is_sum     = valid && (op == 0);
+               let is_diff    = valid && (op == 1);
+               let is_prod    = valid && (op == 2);
+               let is_quot    = valid && (op == 3);
+               let is_recall  = valid && (op == 4);
+               let is_mem     = valid && (op == 5);
+               let is_invalid_op = valid && (op == 6 || op == 7);
+               let is_arith  = valid && !is_recall && !is_mem && !is_invalid_op;
                
                // For debugging
                let oldvalval1 = "";
@@ -282,7 +280,7 @@
                   fill: "blue"});
                this.getObjects().val2num.set({
                   text: '$val2'.asInt(NaN).toString(16) + oldvalval2,
-                  fill: val2mod ? "blue" : "grey"});
+                  fill: is_arith ? "blue" : "grey"});
                this.getObjects().outnum.set({
                   text: '$out'.asInt(NaN).toString(16) + oldvalout,
                   fill: valid ? "blue" : "grey"});
@@ -290,14 +288,14 @@
                this.getObjects().memnum.set({
                   text: mem_mod.toString(16) + oldvalrecall,
                   fill: has_mem ? "blue" : "grey"});
-               this.getObjects().sumbox.set({fill: colorsum ?  "#9fc5e8ff" : "white"});
-               this.getObjects().minbox.set({fill: colormin ?  "#9fc5e8ff" : "white"});
-               this.getObjects().prodbox.set({fill: colorprod ? "#9fc5e8ff" : "white"});
-               this.getObjects().quotbox.set({fill: colorquot ?  "#9fc5e8ff" : "white"});
-               this.getObjects().membuttonbox.set({fill: colormembutton ? "#9fc5e8ff" : "white"});
-               this.getObjects().recallbuttonbox.set({fill: colorrecallbutton ?  "#9fc5e8ff" : "white"});
-               this.getObjects().memarrow.set({fill: colormemarrow ? "blue" : "#779"});
-               this.getObjects().recallarrow.set({fill: colorrecallarrow ?  "blue" : "#779"});
+               this.getObjects().sumbox.set({fill: is_sum ?  "#9fc5e8ff" : "white"});
+               this.getObjects().minbox.set({fill: is_diff ?  "#9fc5e8ff" : "white"});
+               this.getObjects().prodbox.set({fill: is_prod ? "#9fc5e8ff" : "white"});
+               this.getObjects().quotbox.set({fill: is_quot ?  "#9fc5e8ff" : "white"});
+               this.getObjects().membuttonbox.set({fill: is_mem ? "#9fc5e8ff" : "white"});
+               this.getObjects().recallbuttonbox.set({fill: is_recall ?  "#9fc5e8ff" : "white"});
+               this.getObjects().memarrow.set({fill: is_mem ? "blue" : "#779"});
+               this.getObjects().recallarrow.set({fill: is_recall ?  "blue" : "#779"});
              }
    '])
    m4_popdef(['m4_top'])
