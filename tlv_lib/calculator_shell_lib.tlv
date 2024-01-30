@@ -53,7 +53,7 @@
          //These signal represents the change in value's and is used to generate colours in \viz according.
          $val1_changed = $valid && !$is_op_recall && !$is_invalid_op;
          $val2_changed = $valid && !$is_op_recall && !$is_op_mem && !$is_invalid_op;
-         $out_changed  = $valid && ($out_modified || !(|$out_modified)) && !$is_invalid_op && !$is_op_mem;
+         $out_changed  = 1'b1;  // $valid && ($out_modified || !(|$out_modified)) && !$is_invalid_op && !$is_op_mem;
          //$out_modified[7:0] = ($out > ((1 << 31) - 1)) ? (~$out + 1) : $out;
          $out_modified[7:0] = $out;
          //$is_neg_num = ($out > ((1 << 31) - 1));

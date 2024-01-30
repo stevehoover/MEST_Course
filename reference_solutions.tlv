@@ -17,7 +17,7 @@
    // ----------------------------------
    
    // Provide the Lab ID given at the lower right of the slide.
-   var(LabId, DONE)
+   var(LabId, C-MEM)
    
    
    // To build within Makerchip for the FPGA or ASIC:
@@ -63,7 +63,7 @@ module top(input logic clk, input logic reset, input logic [31:0] cyc_cnt, outpu
    logic [7:0] ui_in, uo_out;
    m5_if_neq(m5_target, FPGA, ['logic [7:0]uio_in,  uio_out, uio_oe;'])
    logic [31:0] r;
-   always @(posedge clk) r = m5_if(m5_MAKERCHIP, ['$urandom()'], ['0']);
+   always @(posedge clk) r <= m5_if(m5_MAKERCHIP, ['$urandom()'], ['0']);
    m5_if_eq(LabId, C-TB, [''], ['assign ui_in = m5_ui_in_expr;'])
    m5_if_neq(m5_target, FPGA, ['assign uio_in = r[15:8];'])
    logic ena = 1'b0;
