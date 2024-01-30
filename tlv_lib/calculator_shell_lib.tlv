@@ -37,12 +37,12 @@
       @_stage   
          $ANY = m4_top|calc<>0$ANY;
 
+         $has_mem = $mem != 8'hab;
          /* verilator lint_save */
          /* verilator lint_off WIDTH */
-         $op_viz[2:0] = $op;
+         $op_viz[2:0] = $has_mem ? $op : $op[1:0];
          /* verilator lint_restore */
-         $has_mem = $mem != 8'hab;
-         $mem_mod[7:0] = $has_mem ? 8'b0 : $mem[7:0];
+         $mem_mod[7:0] = $has_mem ? $mem[7:0]: 8'b0 ;
          $is_op_sum     = ($valid && ($op_viz[2:0] == 3'b000)); // sum
          $is_op_diff    = ($valid && ($op_viz[2:0] == 3'b001)); // diff
          $is_op_prod    = ($valid && ($op_viz[2:0] == 3'b010)); // prod
