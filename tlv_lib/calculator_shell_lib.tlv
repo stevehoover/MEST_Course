@@ -41,21 +41,17 @@
          /* verilator lint_off WIDTH */
          $op_viz[2:0] = $op;
          /* verilator lint_restore */
-         $mem_mod[7:0] = ($mem[7:0] == 8'hab) ? 8'b0 : $mem[7:0];
+         $has_mem = $mem != 8'hab;
          $is_op_sum     = ($valid && ($op_viz[2:0] == 3'b000)); // sum
          $is_op_diff    = ($valid && ($op_viz[2:0] == 3'b001)); // diff
          $is_op_prod    = ($valid && ($op_viz[2:0] == 3'b010)); // prod
          $is_op_quot    = ($valid && ($op_viz[2:0] == 3'b011)); // quot
          $is_op_recall  = ($valid && ($op_viz[2:0] == 3'b100)); // recall(retrieving from memory)
-         $is_op_mem     = ($valid && ($op_viz[2:0] == 3'b101) && !($mem == 8'hab)); // mem(storing to memory)
+         $is_op_mem     = ($valid && ($op_viz[2:0] == 3'b101) && $has_mem); // mem(storing to memory)
          $is_invalid_op = ($valid && ($op_viz[2:0] == 3'b110 || $op_viz[2:0] == 3'b111)); // invalid operation?
 
          //These signal represents the change in value's and is used to generate colours in \viz according.
-         $val1_changed = $valid && !$is_op_recall && !$is_invalid_op;
          $val2_changed = $valid && !$is_op_recall && !$is_op_mem && !$is_invalid_op;
-         $out_changed  = 1'b1;  // $valid && ($out_modified || !(|$out_modified)) && !$is_invalid_op && !$is_op_mem;
-         //$out_modified[7:0] = ($out > ((1 << 31) - 1)) ? (~$out + 1) : $out;
-         $out_modified[7:0] = $out;
          //$is_neg_num = ($out > ((1 << 31) - 1));
 
          \viz_js
@@ -287,9 +283,7 @@
                let colormemarrow = '$is_op_mem'.asBool(false);
                let colorrecallarrow = '$is_op_recall'.asBool(false);
                let recallmod = '$is_op_recall'.asBool(false);
-               let val1mod = '$val1_changed'.asBool(false);
                let val2mod = '$val2_changed'.asBool(false);
-               let outmod = '$out_changed'.asBool(false);
                //let colornegnum = '$is_neg_num'.asBool(false);
                let oldvalval1 = ""; // for debugging
                let oldvalval2 = ""; // for debugging
@@ -297,16 +291,17 @@
                let oldvalrecall = ""; // for debugging
                this.getObjects().val1num.set({
                   text: '$val1'.asInt(NaN).toString(16) + oldvalval1,
-                  fill: val1mod ? "blue" : "grey"});
+                  fill: "blue"});
                this.getObjects().val2num.set({
                   text: '$val2'.asInt(NaN).toString(16) + oldvalval2,
                   fill: val2mod ? "blue" : "grey"});
                this.getObjects().outnum.set({
-                  text: '$out_modified'.asInt(NaN).toString(16) + oldvalout,
-                  fill: outmod ? "blue" : "grey"});
+                  text: '$out'.asInt(NaN).toString(16) + oldvalout,
+                  fill: valid ? "blue" : "grey"});
+               
                this.getObjects().memnum.set({
                   text: '$mem_mod'.asInt(NaN).toString(16) + oldvalrecall,
-                  fill: (recallmod || colormembutton) ? "blue" : "grey"});
+                  fill: '$has_mem' ? "blue" : "grey"});
                this.getObjects().sumbox.set({fill: colorsum ?  "#9fc5e8ff" : "white"});
                this.getObjects().minbox.set({fill: colormin ?  "#9fc5e8ff" : "white"});
                this.getObjects().prodbox.set({fill: colorprod ? "#9fc5e8ff" : "white"});
