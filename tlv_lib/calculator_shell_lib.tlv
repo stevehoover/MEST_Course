@@ -40,6 +40,8 @@
          \viz_js
             box: {strokeWidth: 0},
             init() {
+               let value_right = 150 + 316 - 30;
+               m5_var(value_props, ['left: value_right, top: 150 + 221 + 7, originX: "right", textAlign: "right", fontSize: 22, fontFamily: "Courier New"'])
                let tlvname = new fabric.Text("TL-V", {
                  left: 150 + 130,
                  top: 150 - 40,
@@ -74,10 +76,8 @@
                  strokeWidth: 1,
                });
                let val1num = new fabric.Text("", {
-                 left: 150 + 28 + 30,
+                 m5_value_props,
                  top: 150 + 89,
-                 fontSize: 22,
-                 fontFamily: "Times",
                });
                let val2box = new fabric.Rect({
                  left: 150 + 187,
@@ -89,10 +89,8 @@
                  strokeWidth: 1,
                });
                let val2num = new fabric.Text("", {
-                 left: 150 + 187 + 1,
+                 m5_value_props,
                  top: 150 + 221 + 7,
-                 fontSize: 22,
-                 fontFamily: "Times",
                });
                let outbox = new fabric.Rect({
                  left: 150 + 97,
@@ -104,17 +102,8 @@
                  strokeWidth: 1,
                });
                let outnum = new fabric.Text("", {
-                 left: 150 + 97 + 20,
+                 m5_value_props,
                  top: 150 + 300 + 8,
-                 fontSize: 22,
-                 fontFamily: "Times",
-               });
-               let outnegsign = new fabric.Text("-", {
-                 left: 150 + 97 + 8,
-                 top: 150 + 300 + 6,
-                 fontSize: 22,
-                 fontFamily: "Times",
-                 fill : "#ddd",
                });
                let equalname = new fabric.Text("=", {
                  left: 150 + 38,
@@ -216,10 +205,8 @@
                  fontFamily: "monospace",
                });
                let memnum = new fabric.Text("", {
-                 left: 150 + 105 + 30,
+                 m5_value_props,
                  top: 150 + 25,
-                 fontSize: 22,
-                 fontFamily: "Times",
                });
                let membuttonbox = new fabric.Rect({
                  left: 150 + 187,
@@ -253,7 +240,7 @@
                  fontSize: 22,
                  fontFamily: "Times",
                });
-               return {tlvname, hexcalname, calbox, val1box, val1num, val2box, val2num, outbox, outnum, equalname, sumbox, minbox, prodbox, quotbox, sumicon, prodicon, minicon, quoticon, outnegsign,  membox, memname, memnum, membuttonbox, recallbuttonbox, membuttonname, recallbuttonname, memarrow, recallarrow};
+               return {tlvname, hexcalname, calbox, val1box, val1num, val2box, val2num, outbox, outnum, equalname, sumbox, minbox, prodbox, quotbox, sumicon, prodicon, minicon, quoticon,  membox, memname, memnum, membuttonbox, recallbuttonbox, membuttonname, recallbuttonname, memarrow, recallarrow};
             },
             render() {
                let valid = '$valid'.asBool(false);
@@ -274,7 +261,7 @@
                let oldvalval2 = "";
                let oldvalout = "";
                let oldvalrecall = "";
-
+         
                this.getObjects().val1num.set({
                   text: '$val1'.asInt(NaN).toString(16) + oldvalval1,
                   fill: "blue"});
