@@ -67,6 +67,7 @@
    m4_ifelse_block(M4_MAKERCHIP, 1, ['
    m4_ifelse_block(m4_sp_graph_dangerous, 1, [''], ['
    |cpu
+      /imem[m5_calc(m5_NUM_INSTRS-1):0]   // Declare it in case these is no imem.
       // for pulling default viz signals into CPU
       // and then back into viz
       @0
@@ -84,7 +85,7 @@
       assign instr_strs[m5_NUM_INSTRS] = "END                                     ";
    |cpuviz
       @1
-         /imem[m5_calc(m5_NUM_INSTRS-1):0]  // TODO: Cleanly report non-integer ranges.
+         /imem[m5_calc(m5_NUM_INSTRS-1):0]
             $instr[31:0] = /fpga|cpu/imem<>0$instr;
             $instr_str[40*8-1:0] = *instr_strs[imem];
             \viz_js
